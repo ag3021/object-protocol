@@ -1,0 +1,26 @@
+{
+  "name": "object-protocol",
+  "version": "0.0.5",
+  "description": "Ruby EventMachine ObjectProtocol logic",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ag3021/object-protocol.git"
+  },
+  "keywords": [
+    "bytesize",
+    "chunker",
+    "socket",
+    "object",
+    "protocol"
+  ],
+  "author": "Andy Addington",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ag3021/object-protocol/issues"
+  },
+  "homepage": "https://github.com/ag3021/object-protocol#readme"
+}
