@@ -15,7 +15,7 @@ const SocketObjectProtocol = Object.defineProperties(function SocketObjectProtoc
 Object.defineProperties(SocketObjectProtocol.prototype, {
 
   complete: { value: function(res) {
-    this._receiveCBs.forEach(function(f) { f.call(f, this); }, JSON.parse(res.toString('ascii')));
+    this._receiveCBs.forEach(function(f) { f.call(f, this); }, res.toString('ascii'));
   } },
 
   getSize: { value: function(data) {
@@ -38,17 +38,19 @@ Object.defineProperties(SocketObjectProtocol.prototype, {
   } },
 
   sendObject: { value: function(obj) {
-    obj = JSON.stringify(obj);
-    let buffer = bufferpack.pack(SocketObjectProtocol.PACK_FORMAT, [obj.length]).toString('ascii');
-    this.client.write(buffer + obj);
+    if (typeof obj == 'object') {
+      obj = JSON.stringify(obj);
+    }
+    let buffer = bufferpack.pack(SocketObjectProtocol.PACK_FORMAT, [obj.length]);
+    this.client.write(Buffer.concat([buffer, Buffer.isBuffer(obj) ? obj : new Buffer(obj)]));
   } },
 
   onReceive: { value: function(cb) {
     if( typeof cb == 'function') this._receiveCBs.push(cb);
   } },
 
-  init: { value: function() {
-    this.client = net.connect(this.options, function() {
+  init: { value: function(client) {
+    this.client = client || net.connect(this.options, function() {
       this.client.on('data', this.chunk.bind(this));
       this.client.on('error', console.log.bind(console));
     }.bind(this));
